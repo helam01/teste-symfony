@@ -17,11 +17,23 @@ class RelatorioController extends Controller
      */
     public function getChamadoAction(Request $request)
     {
+    	$page = ($request->query->get('page')) ? $request->query->get('page') : 1;
+
         $chamados = $this->get('ChamadoModel')->search(
+            $page,
             $request->query->get('tipo'),
             $request->query->get('valor')
         );
 
-        return $this->render('chamado/relatorio.html.twig', ['chamados'=>$chamados]);
+        $limit = 5;
+	    $maxPages = ceil($chamados->count() / $limit);
+	    $thisPage = $page;
+
+        return $this->render('chamado/relatorio.html.twig', [
+        	'chamados'=>$chamados,
+        	'limit' => $limit,
+        	'maxPages' => $maxPages,
+        	'thisPage' => $thisPage,
+        ]);	
     }
 }

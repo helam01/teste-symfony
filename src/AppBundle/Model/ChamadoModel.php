@@ -8,6 +8,8 @@ use AppBundle\Entity\Cliente;
 use AppBundle\Entity\Pedido;
 use AppBundle\Entity\Chamado;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 class ChamadoModel extends Model
 {
 	public function newChamado( $cliente, $pedido, $inputs )
@@ -22,7 +24,7 @@ class ChamadoModel extends Model
 	}
 
 
-	public function search( $tipo, $valor )
+	public function search($page, $tipo, $valor )
 	{
 		$repository = $this->driver->getRepository("AppBundle:Chamado");
 		$query = $repository->createQueryBuilder('c');
@@ -41,6 +43,18 @@ class ChamadoModel extends Model
 
 		$query = $query->getQuery();
 
-		return $query->getResult();
+		$paginator = $this->paginate($query, $page);
+		return $paginator;
+	}
+
+	public function paginate($dql, $page = 1, $limit = 5)
+	{
+	    $paginator = new Paginator($dql);
+
+	    $paginator->getQuery()
+	        ->setFirstResult($limit * ($page - 1)) // Offset
+	        ->setMaxResults($limit); // Limit
+
+	    return $paginator;
 	}
 }
