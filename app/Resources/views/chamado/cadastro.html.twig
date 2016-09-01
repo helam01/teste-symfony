@@ -11,31 +11,32 @@
 		  <div class="form-group">
 		    <label for="pedido_numero">Número do pedido</label>
 		    <input type="text" class="form-control" id="pedido_numero" placeholder="Digite o número"
-		    	value="{!! old('pedido_numero') !!}" name="pedido_numero" required="">
-		    	@if( Session::has('alert'))
-		    		<span id="helpBlock2" class="inputs-messages">{!! Session::get('alert')['message'] !!}</span>
-		    	@endif
+		    	value="" name="pedido_numero" required="">
+		    	
+		    	{% for flashM in app.session.flashbag.get('error_pedido') %}
+					<span id="helpBlock2" class="inputs-messages">{{ flashM }}</span>
+				{% endfor %}
 		    
 		  </div>
 
 		  <div class="form-group">
 		    <label for="cliente_nome">Nome do Cliente</label>
 		    <input type="text" name="cliente_nome" class="form-control" id="cliente_nome" 
-		    	placeholder="Digite o nome do cliente" value="{!! old('cliente_nome') !!}" required="" >
+		    	placeholder="Digite o nome do cliente" value="" required="" >
 		  </div>
 		  <div class="form-group">
 		    <label for="cliente_email">Email do Cliente</label>
 		    <input type="email" name="cliente_email" class="form-control" id="cliente_email" 
-		     placeholder="Digite o email do cliente" value="{!! old('cliente_email') !!}" required="">
+		     placeholder="Digite o email do cliente" value="" required="">
 		  </div>
 		  <div class="form-group">
-		    <label for="chamado_titlo">Titulo</label>
-		    <input type="text" name="chamado_titlo" class="form-control" id="chamado_titlo" 
-		    placeholder="Digite um titulo" value="{!! old('chamado_titlo') !!}" required="">
+		    <label for="chamado_titulo">Titulo</label>
+		    <input type="text" name="chamado_titulo" class="form-control" id="chamado_titulo" 
+		    placeholder="Digite um titulo" value="" required="">
 		  </div>
 		  <div class="form-group">
 		    <label for="chamado_descricao">Observação</label>
-		    <textarea class="form-control" rows="3" id="chamado_observacao" name="chamado_observacao" required="">{!! old('chamado_observacao') !!}</textarea>
+		    <textarea class="form-control" rows="3" id="chamado_observacao" name="chamado_observacao" required=""></textarea>
 		  </div>
 
 
@@ -49,9 +50,10 @@
 {% block js %}
 <script type="text/javascript">
 	$(function(){
-		@if( Session::has('success'))
-			$.notify("{!!Session::get('success')['message'] !!}", "success");
-		@endif
+		{% for flashM in app.session.flashbag.get('cadastro') %}
+			$.notify("{{ flashM }}", "success");
+		{% endfor %}
+
 		$('.btnSaveAjax').click(function(e){
 			e.preventDefault();
 			save();
@@ -64,7 +66,7 @@
 			"pedido_numero" : $("#pedido_numero").val(),
 			"cliente_nome" : $("#cliente_nome").val(),
 			"cliente_email" : $("#cliente_email").val(),
-			"chamado_titlo" : $("#chamado_titlo").val(),
+			"chamado_titulo" : $("#chamado_titulo").val(),
 			"chamado_observacao" : $("#chamado_observacao").val(),
 		};
 		return data;
@@ -74,7 +76,7 @@
 		var data = formSerialize();
 		console.log( data );
 		$.ajax({
-			url : "{!! route('postSacAjax') !!}",
+			url : "{{ path('postChamadoAjax') }}",
 			dataType : "Json",
 			type : "post",
 			data : data,

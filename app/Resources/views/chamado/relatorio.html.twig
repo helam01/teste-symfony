@@ -1,0 +1,62 @@
+{% extends 'template.html.twig' %}
+
+{% block content %}
+	<div class="row" style="margin-top:50px">
+		<div class="col-md-12">
+			<h3>Relatório</h3>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Fltro</h4>
+		</div>
+		<div class="col-md-12">
+			<form class="form-inline" method="get" action="{{ path('getRelatorio') }}">
+				<div class="form-group">
+				    <label for="tipo">Filtar Por: </label>
+					<select class="form-control" name="tipo">
+						<option value='email'>Email do cliente</option>
+						<option value='pedido'>Número do Pedido</option>
+					</select>   
+				    
+				</div>
+				<div class="form-group">
+				    <label for="pedido_numero">Valor: </label>
+				    <input type="text" class="form-control" name="valor">
+				</div>
+				<button type="submit" class="btn btn-default">Pesquisar</button>
+				<a href="{{ path('getRelatorio') }}" class="btn btn-default">Remover filtro</a>
+			</form>
+		</div>
+	</div>
+
+	<div>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Titulo</th>
+					<th>obervação</th>
+					<th>Pedido</th>
+					<th>Cliente</th>
+					<th>Email</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for chamado in chamados %}
+				<tr>
+					<td>{{chamado.titulo}}</td>
+					<td>{{chamado.observacao}}</td>
+					<td>{{chamado.pedido.id}}</td>
+					<td>{{chamado.cliente.nome}}</td>
+					<td>{{chamado.cliente.email}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript"></script>
+{% endblock %}

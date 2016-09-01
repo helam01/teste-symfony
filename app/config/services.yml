@@ -7,3 +7,21 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
+## Models como serviços
+    model:
+        class: AppBundle\Model\Model
+        abstract:  true
+        arguments: ["@doctrine.orm.entity_manager"]
+
+    ClienteModel:
+        class: AppBundle\Model\ClienteModel
+        parent: model
+
+    PedidoModel:
+        class: AppBundle\Model\PedidoModel
+        parent: model
+
+    ChamadoModel:
+        class: AppBundle\Model\ChamadoModel
+        parent: model
